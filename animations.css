@@ -1,0 +1,157 @@
+/* ═══════════════════════════════════════════
+   KMSS — OPTIMIZED CINEMATIC ANIMATION SYSTEM
+   GPU-accelerated. Smooth. Lightweight.
+═══════════════════════════════════════════ */
+
+/* ══ WILL-CHANGE HINTS — applied only where needed ══ */
+.hero-slide,
+.hero-content,
+.sidebar-logo {
+  will-change: transform;
+}
+
+/* ══ SCROLL REVEAL ══ */
+.reveal, .reveal-left, .reveal-right, .reveal-scale {
+  opacity: 0;
+  transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal        { transform: translateY(32px); }
+.reveal-left   { transform: translateX(-40px); }
+.reveal-right  { transform: translateX(40px); }
+.reveal-scale  { transform: scale(0.93); }
+.reveal.visible,
+.reveal-left.visible,
+.reveal-right.visible,
+.reveal-scale.visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ══ STAGGER DELAYS ══ */
+.delay-1 { transition-delay: 0.08s !important; }
+.delay-2 { transition-delay: 0.18s !important; }
+.delay-3 { transition-delay: 0.28s !important; }
+.delay-4 { transition-delay: 0.36s !important; }
+.delay-5 { transition-delay: 0.44s !important; }
+.delay-6 { transition-delay: 0.52s !important; }
+
+/* ══ HERO ENTRANCE — one-time, GPU-only ══ */
+.hero-badge,
+.hero-title,
+.hero-sub,
+.hero-actions,
+.hero-stats {
+  opacity: 0;
+  transform: translateY(20px);
+}
+.hero-badge.hero-in   { animation: heroIn 0.8s cubic-bezier(0.16,1,0.3,1) 0.25s both; }
+.hero-title.hero-in   { animation: heroIn 0.9s cubic-bezier(0.16,1,0.3,1) 0.42s both; }
+.hero-sub.hero-in     { animation: heroIn 0.8s cubic-bezier(0.16,1,0.3,1) 0.60s both; }
+.hero-actions.hero-in { animation: heroIn 0.8s cubic-bezier(0.16,1,0.3,1) 0.76s both; }
+.hero-stats.hero-in   { animation: heroIn 0.8s cubic-bezier(0.16,1,0.3,1) 0.90s both; }
+
+@keyframes heroIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ══ LIVE STATE — static after entrance (no persistent float) ══ */
+.hero-badge.hero-live,
+.hero-title.hero-live,
+.hero-sub.hero-live,
+.hero-actions.hero-live,
+.hero-stats.hero-live {
+  opacity: 1;
+  transform: none;
+}
+
+/* ══ KEN BURNS — subtle, GPU-only scale ══ */
+@keyframes kenBurnsLoop {
+  0%   { transform: scale(1.0); }
+  50%  { transform: scale(1.05); }
+  100% { transform: scale(1.0); }
+}
+
+/* ══ AMBIENT GLOW PULSE — opacity only, cheap ══ */
+@keyframes ambientPulse {
+  0%, 100% { opacity: 0.4; }
+  50%      { opacity: 0.75; }
+}
+@keyframes ambientDrift {
+  0%,100% { transform: translate(-50%,-50%) scale(1); opacity: 0.4; }
+  50%     { transform: translate(-50%,-50%) scale(1.1); opacity: 0.7; }
+}
+
+/* ══ LOGO FLOAT — subtle, GPU-only ══ */
+@keyframes logoFloat {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-7px); }
+}
+.sidebar-logo { animation: logoFloat 5s ease-in-out infinite; }
+
+/* ══ NAV ACTIVE — simple opacity pulse ══ */
+@keyframes navActivePulse {
+  0%, 100% { background: rgba(245,166,35,0.10); }
+  50%      { background: rgba(245,166,35,0.16); }
+}
+.nav-link.active { animation: navActivePulse 3.5s ease-in-out infinite; }
+
+/* ══ SCROLL LINE ══ */
+@keyframes scrollLine {
+  0%   { transform: scaleY(1) translateY(0); opacity: 1; }
+  100% { transform: scaleY(0) translateY(50px); opacity: 0; }
+}
+.scroll-line { animation: scrollLine 2s ease-in-out infinite; }
+
+/* ══ BADGE DOT PULSE ══ */
+@keyframes badgeDot {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(245,166,35,0.6); }
+  50%      { box-shadow: 0 0 0 7px rgba(245,166,35,0); }
+}
+.badge-dot { animation: badgeDot 2.2s ease-in-out infinite; }
+
+/* ══ TECH BAR FILL ══ */
+.tech-fill.animated { width: var(--pct) !important; }
+
+/* ══ PAGE LOADER ══ */
+.page-loader {
+  position: fixed; inset: 0; z-index: 9999;
+  background: #060d1a;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 20px;
+  transition: opacity 0.7s ease, visibility 0.7s ease;
+}
+.page-loader.loaded { opacity: 0; visibility: hidden; pointer-events: none; }
+.loader-logo-wrap {
+  width: 80px; height: 80px; border-radius: 50%;
+  border: 2px solid rgba(245,166,35,0.3);
+  display: flex; align-items: center; justify-content: center;
+  animation: loaderSpin 1.4s linear infinite;
+}
+.loader-logo-img { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; }
+.loader-bar-wrap { width: 160px; height: 2px; background: rgba(255,255,255,0.08); border-radius: 2px; overflow: hidden; }
+.loader-bar {
+  height: 100%; width: 0%;
+  background: linear-gradient(90deg, #d4891a, #f5a623);
+  animation: loaderProgress 1.7s cubic-bezier(0.4,0,0.2,1) forwards;
+}
+@keyframes loaderSpin    { to { transform: rotate(360deg); } }
+@keyframes loaderProgress { 0% { width: 0%; } 70% { width: 80%; } 100% { width: 100%; } }
+
+/* ══ GLASS CARD SHIMMER — slower, lighter ══ */
+.glass-card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -120%; width: 60%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent);
+  pointer-events: none;
+  animation: shimmerSweep 12s ease-in-out infinite;
+}
+@keyframes shimmerSweep {
+  0%, 100% { left: -120%; }
+  50%      { left: 160%; }
+}
+
+/* ══ FOOTER GOLD LINE ══ */
+.footer { border-top: 1px solid rgba(245,166,35,0.1); }
